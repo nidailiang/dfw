@@ -1,0 +1,4 @@
+- [API 后端配置](api-backend.md) — DeepSeek API 作为后端，模型名、token、环境变量配置
+- [项目概览](project-overview.md) — 股票数据分析项目，K线图、筹码分布
+- [用户偏好](user-prefs.md) — 中文交流、多平台、简洁风格
+- [新电脑配置指南](setup-claude.md) — macOS/Windows 上安装配置 Claude Code 的步骤
