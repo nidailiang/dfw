@@ -1,0 +1,39 @@
+{参数说明:
+ N1: 年份
+ N2: 月份
+ N3: 日期
+ N4: 价格下限 (0表示不限制)
+ N5: 价格上限 (0表示不限制)
+ N6: 指定日期涨跌情况 (1:上涨, -1:下跌, 0:不限制)
+ N7: 指定日期具体涨跌幅 (0:不限制, 非0:匹配具体值)
+ N8: 指定日期短期趋势线值 (0表示不限制)
+ N9: 指定日期多空线值 (0表示不限制)
+}
+
+DATEPRICE:=REF(C,BARSLAST(YEAR=N1 AND MONTH=N2 AND DAY=N3));
+DATECHANGE:=REF((C-REF(C,1))/REF(C,1)*100,BARSLAST(YEAR=N1 AND MONTH=N2 AND DAY=N3));
+
+{计算指定日期的技术指标值}
+DATESTL:=REF(EMA(EMA(C,10),10),BARSLAST(YEAR=N1 AND MONTH=N2 AND DAY=N3));
+DATEMULTILINE:=REF((MA(CLOSE,14)+MA(CLOSE,28)+MA(CLOSE,57)+MA(CLOSE,114))/4,BARSLAST(YEAR=N1 AND MONTH=N2 AND DAY=N3));
+
+{条件1: 指定日期价格在N4-N5范围内 (如果N4或N5为0则不限制)}
+COND1:=(N4=0 OR N5=0) OR (DATEPRICE>=N4 AND DATEPRICE<=N5);
+
+{条件2: 指定日期价格有效}
+COND2:=DATEPRICE>0;
+
+{条件3: 指定日期涨跌情况匹配N6}
+COND3:=(N6=1 AND DATECHANGE>0) OR (N6=-1 AND DATECHANGE<0) OR N6=0;
+
+{条件4: 指定日期涨跌幅匹配N7}
+COND4:=(N7<>0 AND ABS(DATECHANGE-N7)<0.01) OR N7=0;
+
+{条件5: 指定日期短期趋势线匹配N8}
+COND5:=(N8<>0 AND ABS(DATESTL-N8)<0.01) OR N8=0;
+
+{条件6: 指定日期多空线匹配N9}
+COND6:=(N9<>0 AND ABS(DATEMULTILINE-N9)<0.01) OR N9=0;
+
+{组合所有条件}
+SELECT:COND1 AND COND2 AND COND3 AND COND4 AND COND5 AND COND6;

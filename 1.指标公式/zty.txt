@@ -1,0 +1,7 @@
+短:=EMA(EMA(C,10),10);
+长:=(MA(CLOSE,14)+MA(CLOSE,28)+MA(CLOSE,57)+MA(CLOSE,114))/4;
+主力:MA(长+短,1)+ MA(长+短,40);
+差值:=主力-REF(主力,1);
+偏移量 := 0.2;
+STICKLINE(差值>0, 主力+偏移量, 主力+差值+偏移量, 3 ,0), COLORRED;
+STICKLINE(差值<0, 主力-偏移量, 主力+差值-偏移量, 3 ,0), COLORGREEN;

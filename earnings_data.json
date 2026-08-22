@@ -1,0 +1,258 @@
+{
+  "pjtd": {
+    "data": {
+      "name": "拓荆科技 688072",
+      "entry": 627,
+      "current": 677.88,
+      "report_date": "8月21日",
+      "q1_rev": 11.12,
+      "q1_net": 5.71,
+      "q1_recurring": 1.02,
+      "fy_rev_consensus": 87.06,
+      "fy_rev_range": [
+        84.5,
+        90.9
+      ],
+      "fy_np_consensus": 16.66,
+      "fy_np_range": [
+        13.27,
+        19.44
+      ],
+      "fy_eps_consensus": 5.9,
+      "orders_hand": 110,
+      "q2_consensus_rev": 17.2,
+      "gross_margin_q1": 41.7,
+      "n_analysts": 13
+    },
+    "result": {
+      "scenarios": [
+        {
+          "label": "超预期",
+          "prob": 25,
+          "rev_q2": 18.9,
+          "rev_h1": 30.0,
+          "h1_pct_of_fy": 34.5,
+          "desc": "交付超预期+新品放量+毛利率提升",
+          "price_range": [
+            759.0,
+            827.0
+          ],
+          "action": "",
+          "entry_pnl": [
+            21.1,
+            31.9
+          ]
+        },
+        {
+          "label": "符合预期偏强",
+          "prob": 30,
+          "rev_q2": 18.1,
+          "rev_h1": 29.2,
+          "h1_pct_of_fy": 33.5,
+          "desc": "按计划交付，毛利率稳定改善",
+          "price_range": [
+            698.0,
+            746.0
+          ],
+          "action": "",
+          "entry_pnl": [
+            11.4,
+            18.9
+          ]
+        },
+        {
+          "label": "符合预期偏弱",
+          "prob": 25,
+          "rev_q2": 16.3,
+          "rev_h1": 27.5,
+          "h1_pct_of_fy": 31.5,
+          "desc": "交付略慢但全年目标可维持",
+          "price_range": [
+            658.0,
+            698.0
+          ],
+          "action": "",
+          "entry_pnl": [
+            4.9,
+            11.4
+          ]
+        },
+        {
+          "label": "低于预期",
+          "prob": 20,
+          "rev_q2": 15.1,
+          "rev_h1": 26.3,
+          "h1_pct_of_fy": 30.2,
+          "desc": "交付延迟或客户验收推迟",
+          "price_range": [
+            576.0,
+            624.0
+          ],
+          "action": "",
+          "entry_pnl": [
+            -8.1,
+            -0.5
+          ]
+        }
+      ],
+      "expected_return": "12.3",
+      "win_prob": 80,
+      "lose_prob": 20,
+      "flat_prob": 0,
+      "price_scenarios": [
+        [
+          25,
+          759.2256000000001,
+          827.0136,
+          "超预期: +12%~+22%"
+        ],
+        [
+          30,
+          698.2164,
+          745.668,
+          "偏强: +3%~+10%"
+        ],
+        [
+          25,
+          657.5436,
+          698.2164,
+          "偏弱: -3%~+3%"
+        ],
+        [
+          20,
+          576.198,
+          623.6496000000001,
+          "低于: -8%~-15%"
+        ]
+      ]
+    }
+  },
+  "pmx": {
+    "data": {
+      "name": "沐曦股份 688802",
+      "entry": 713,
+      "current": 726.03,
+      "report_date": "待披露",
+      "q1_rev": 5.62,
+      "q1_net": -0.99,
+      "fy_rev_consensus": 35.16,
+      "fy_rev_range": [
+        30.97,
+        40.79
+      ],
+      "fy_np_consensus": 0.82,
+      "fy_np_range": [
+        0.14,
+        3.25
+      ],
+      "fy_eps_consensus": 0.2,
+      "gross_margin_q1": 60.0,
+      "n_analysts": 6,
+      "listed_date": "2025-12-17",
+      "ipo_close": 830,
+      "target_avg": 892
+    },
+    "result": {
+      "scenarios": [
+        {
+          "label": "超预期",
+          "prob": 25,
+          "rev_q2": 9.9,
+          "rev_h1": 15.5,
+          "h1_pct_of_fy": 44.1,
+          "desc": "交付超预期+新品放量+毛利率提升",
+          "price_range": [
+            813.0,
+            886.0
+          ],
+          "action": "",
+          "entry_pnl": [
+            14.0,
+            24.2
+          ]
+        },
+        {
+          "label": "符合预期偏强",
+          "prob": 30,
+          "rev_q2": 9.5,
+          "rev_h1": 15.1,
+          "h1_pct_of_fy": 42.9,
+          "desc": "按计划交付，毛利率稳定改善",
+          "price_range": [
+            748.0,
+            799.0
+          ],
+          "action": "",
+          "entry_pnl": [
+            4.9,
+            12.0
+          ]
+        },
+        {
+          "label": "符合预期偏弱",
+          "prob": 25,
+          "rev_q2": 8.5,
+          "rev_h1": 14.2,
+          "h1_pct_of_fy": 40.3,
+          "desc": "交付略慢但全年目标可维持",
+          "price_range": [
+            704.0,
+            748.0
+          ],
+          "action": "",
+          "entry_pnl": [
+            -1.2,
+            4.9
+          ]
+        },
+        {
+          "label": "低于预期",
+          "prob": 20,
+          "rev_q2": 7.9,
+          "rev_h1": 13.5,
+          "h1_pct_of_fy": 38.5,
+          "desc": "交付延迟或客户验收推迟",
+          "price_range": [
+            617.0,
+            668.0
+          ],
+          "action": "",
+          "entry_pnl": [
+            -13.4,
+            -6.3
+          ]
+        }
+      ],
+      "expected_return": "5.8",
+      "win_prob": 55,
+      "lose_prob": 20,
+      "flat_prob": 25,
+      "price_scenarios": [
+        [
+          25,
+          813.1536000000001,
+          885.7565999999999,
+          "超预期: +12%~+22%"
+        ],
+        [
+          30,
+          747.8109,
+          798.633,
+          "偏强: +3%~+10%"
+        ],
+        [
+          25,
+          704.2491,
+          747.8109,
+          "偏弱: -3%~+3%"
+        ],
+        [
+          20,
+          617.1255,
+          667.9476,
+          "低于: -8%~-15%"
+        ]
+      ]
+    }
+  }
+}
