@@ -77,14 +77,14 @@ def compute_macd(df: pd.DataFrame, fast: int = 12, slow: int = 26,
 
 
 # ── 信号分析 ────────────────────────────────────────────
-def print_signals(df: pd.DataFrame) -> None:
-    """打印最近行情的 KDJ/MACD 信号"""
+def print_signals(df: pd.DataFrame, label: str = "") -> None:
+    """打印最近行情的 KDJ/MACD 信号, label 为股票显示名(如 '拓荆科技 688072')"""
     last = df.iloc[-1]
     prev = df.iloc[-2]
     close = last["close"]
 
     print(f"\n{'='*60}")
-    print(f"  📊 江波龙 (301308)  最新: {last['date']}  收盘: {close}")
+    print(f"  📊 {label}  最新: {last['date']}  收盘: {close}")
     print(f"{'='*60}")
 
     # ── KDJ ──
@@ -139,6 +139,8 @@ if __name__ == "__main__":
         description="拉取 A 股 K 线数据，计算 KDJ/MACD，默认分析江波龙(301308)")
     parser.add_argument("symbol", nargs="?", default="301308",
                         help="股票代码（默认 301308 江波龙）")
+    parser.add_argument("-n", "--name", default=None,
+                        help="股票中文名(用于显示标题)")
     parser.add_argument("-s", "--start", default="20250101")
     parser.add_argument("-e", "--end", default=None)
     parser.add_argument("-o", "--output", default=None,
@@ -180,6 +182,7 @@ if __name__ == "__main__":
 
     # 信号摘要
     if not args.raw and "K" in df.columns and "DIF" in df.columns:
-        print_signals(df)
+        label = f"{args.name} ({args.symbol})" if args.name else args.symbol
+        print_signals(df, label)
     elif not args.raw:
         print("\n⚠️  部分指标未计算，无法输出信号")

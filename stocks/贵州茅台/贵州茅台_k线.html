@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>贵州茅台 (600519) — 交互K线</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js"></script>
+<style>
+:root { color-scheme: dark; }
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+       background:#0d0d0d; color:#fff; padding:16px; }
+.controls { display:flex; flex-wrap:wrap; gap:8px 18px; align-items:center;
+  background:#1a1a19; border:1px solid #2c2c2a; border-radius:8px;
+  padding:10px 14px; margin-bottom:10px; max-width:1200px; }
+.controls label { font-size:13px; color:#c3c2b7; display:flex; align-items:center; gap:5px; }
+.controls input[type=number] { width:52px; background:#0d0d0d; color:#fff;
+  border:1px solid #3a3a38; border-radius:4px; padding:3px 6px; font-size:13px; }
+.controls input[type=text] { width:140px; background:#0d0d0d; color:#fff;
+  border:1px solid #3a3a38; border-radius:4px; padding:3px 6px; font-size:13px; }
+.controls .grp { display:flex; gap:8px; align-items:center;
+  border-left:1px solid #2c2c2a; padding-left:14px; }
+button { background:#eb6834; color:#fff; border:none; border-radius:4px;
+  padding:5px 14px; font-size:13px; cursor:pointer; }
+button:hover { filter:brightness(1.1); }
+.header { max-width:1200px; font-size:18px; font-weight:600;
+  margin-bottom:10px; color:#fff; }
+.sw { display:flex; gap:10px; align-items:center; }
+#chart { max-width:1200px; width:100%; height:660px; background:#1a1a19;
+  border-radius:8px; border:1px solid #2c2c2a; }
+</style>
+</head>
+<body>
+<div class="header">贵州茅台 (600519) 交互K线图</div>
+<div class="controls">
+  <div class="sw">
+    <label><input type="radio" name="mode" id="modeWY" checked> 多空线</label>
+    <label><input type="radio" name="mode" id="modeMA"> 均线组</label>
+  </div>
+  <div class="grp" id="grpMA" style="display:none">
+    <label>均线参数(逗号分隔): <input type="text" id="inpMAs" value="5,10,20,60"></label>
+  </div>
+</div>
+<div id="chart"></div>
+<script>
+const raw = [["2026-01-05", 1352.98, 1393.03, 1352.98, 1398.77, 7094942], ["2026-01-06", 1399.43, 1394.99, 1383.78, 1403.75, 3958618], ["2026-01-07", 1399.75, 1390.45, 1387.36, 1401.82, 2968380], ["2026-01-08", 1390.42, 1379.65, 1375.58, 1390.45, 2913454], ["2026-01-09", 1384.24, 1386.29, 1383.27, 1395.57, 2984774], ["2026-01-12", 1386.29, 1390.32, 1384.34, 1397.91, 3608266], ["2026-01-13", 1393.8, 1378.38, 1376.41, 1396.47, 3916866], ["2026-01-14", 1378.38, 1365.69, 1363.9, 1389.37, 5175797], ["2026-01-15", 1363.74, 1356.78, 1356.48, 1370.4, 4090714], ["2026-01-16", 1362.75, 1350.05, 1348.09, 1365.19, 5512068], ["2026-01-19", 1349.95, 1344.19, 1343.21, 1355.41, 4228640], ["2026-01-20", 1347.61, 1341.79, 1340.33, 1349.64, 3648443], ["2026-01-21", 1341.8, 1319.82, 1318.79, 1342.62, 6451625], ["2026-01-22", 1320.75, 1309.08, 1306.56, 1330.28, 5901089], ["2026-01-23", 1309.12, 1306.09, 1301.66, 1316.83, 6194890], ["2026-01-26", 1309.52, 1310.97, 1294.48, 1323.67, 8016606], ["2026-01-27", 1313.88, 1311.96, 1307.06, 1322.4, 4841596], ["2026-01-28", 1311.99, 1293.09, 1291.44, 1315.57, 7621801], ["2026-01-29", 1304.13, 1404.48, 1298.33, 1411.59, 18953440], ["2026-01-30", 1401.82, 1368.61, 1368.61, 1401.82, 9447974], ["2026-02-02", 1392.05, 1394.01, 1378.98, 1424.86, 8572427], ["2026-02-03", 1411.59, 1440.82, 1409.67, 1442.67, 8632066], ["2026-02-04", 1450.67, 1489.74, 1439.92, 1497.82, 10912293], ["2026-02-05", 1484.86, 1519.05, 1479.97, 1528.82, 9162274], ["2026-02-06", 1519.05, 1479.98, 1471.06, 1531.75, 7896538], ["2026-02-09", 1482.9, 1489.7, 1478.5, 1507.21, 5116846], ["2026-02-10", 1489.71, 1470.01, 1461.9, 1489.71, 3957596], ["2026-02-11", 1470.01, 1469.55, 1461.41, 1479.0, 3092846], ["2026-02-12", 1465.51, 1452.23, 1439.3, 1468.07, 4624582], ["2026-02-13", 1452.23, 1450.96, 1436.58, 1472.94, 4167901], ["2026-02-24", 1485.83, 1432.89, 1429.76, 1489.16, 4191253], ["2026-02-25", 1436.01, 1457.17, 1433.94, 1474.76, 3688067], ["2026-02-26", 1452.23, 1432.31, 1430.81, 1455.05, 3295801], ["2026-02-27", 1433.07, 1421.38, 1421.38, 1442.08, 3216016], ["2026-03-02", 1416.48, 1406.81, 1403.44, 1423.31, 3545386], ["2026-03-03", 1406.8, 1393.22, 1389.25, 1419.28, 4589086], ["2026-03-04", 1382.28, 1368.78, 1359.9, 1390.1, 4801443], ["2026-03-05", 1373.49, 1366.69, 1362.75, 1380.29, 3050524], ["2026-03-06", 1362.75, 1369.59, 1355.91, 1374.96, 2915415], ["2026-03-09", 1357.86, 1364.7, 1351.22, 1372.42, 3744162], ["2026-03-10", 1372.42, 1369.47, 1365.68, 1376.9, 2462592], ["2026-03-11", 1370.55, 1367.63, 1365.7, 1373.48, 2445673], ["2026-03-12", 1362.75, 1359.82, 1358.85, 1371.49, 2758646], ["2026-03-13", 1360.29, 1380.96, 1359.82, 1384.84, 3360783], ["2026-03-16", 1387.17, 1426.42, 1387.17, 1432.11, 6008635], ["2026-03-17", 1434.06, 1450.67, 1427.41, 1463.43, 4945361], ["2026-03-18", 1454.57, 1434.84, 1429.32, 1461.9, 3555100], ["2026-03-19", 1438.9, 1419.28, 1412.57, 1438.94, 3031859], ["2026-03-20", 1419.37, 1411.59, 1405.73, 1428.69, 2613234], ["2026-03-23", 1400.19, 1375.51, 1367.66, 1401.82, 4725589], ["2026-03-24", 1383.26, 1374.79, 1367.81, 1384.81, 2856179], ["2026-03-25", 1377.51, 1377.66, 1368.62, 1385.09, 2609346], ["2026-03-26", 1376.42, 1368.78, 1367.92, 1381.21, 2309289], ["2026-03-27", 1367.63, 1383.28, 1364.37, 1393.03, 3008711], ["2026-03-30", 1374.47, 1387.17, 1370.09, 1397.91, 2868459], ["2026-03-31", 1434.06, 1416.48, 1414.92, 1445.71, 6169066], ["2026-04-01", 1430.63, 1425.7, 1419.29, 1436.0, 2912514], ["2026-04-02", 1425.7, 1426.13, 1418.53, 1431.01, 2106437], ["2026-04-03", 1425.79, 1426.24, 1421.36, 1435.97, 2019373], ["2026-04-07", 1426.29, 1406.73, 1401.87, 1436.01, 2415218], ["2026-04-08", 1426.24, 1431.15, 1418.56, 1435.11, 3383610], ["2026-04-09", 1431.15, 1426.72, 1414.03, 1431.15, 2070476], ["2026-04-10", 1425.4, 1420.34, 1407.78, 1425.96, 2886556], ["2026-04-13", 1410.61, 1409.94, 1399.87, 1413.06, 2521364], ["2026-04-14", 1409.25, 1413.45, 1401.82, 1415.11, 2423261], ["2026-04-15", 1411.57, 1433.57, 1408.66, 1436.78, 3455348], ["2026-04-16", 1433.52, 1429.02, 1426.24, 1443.25, 2451284], ["2026-04-17", 1367.63, 1374.7, 1367.5, 1388.15, 9682499], ["2026-04-20", 1370.56, 1378.27, 1367.63, 1381.25, 3645139], ["2026-04-21", 1378.38, 1379.36, 1377.4, 1387.07, 2175427], ["2026-04-22", 1382.28, 1376.91, 1372.5, 1386.19, 2691593], ["2026-04-23", 1375.45, 1386.19, 1372.61, 1386.88, 3770109], ["2026-04-24", 1380.43, 1424.77, 1380.43, 1425.15, 5545531], ["2026-04-27", 1387.17, 1370.76, 1369.78, 1387.17, 7279774], ["2026-04-28", 1369.59, 1372.52, 1367.74, 1376.8, 3400442], ["2026-04-29", 1372.52, 1368.77, 1367.9, 1377.16, 3481313], ["2026-04-30", 1367.63, 1352.77, 1348.09, 1368.77, 5275267], ["2026-05-06", 1333.54, 1343.21, 1328.61, 1347.12, 4780604], ["2026-05-07", 1343.21, 1339.35, 1338.33, 1355.91, 4046147], ["2026-05-08", 1339.95, 1341.25, 1338.33, 1350.8, 3336853], ["2026-05-11", 1341.15, 1329.86, 1329.53, 1341.15, 5713510], ["2026-05-12", 1330.51, 1323.23, 1319.28, 1332.05, 5083743], ["2026-05-13", 1323.18, 1313.01, 1307.06, 1327.19, 5696787], ["2026-05-14", 1307.06, 1311.14, 1304.31, 1337.41, 5524434], ["2026-05-15", 1304.28, 1302.13, 1296.43, 1308.32, 5818365], ["2026-05-18", 1305.11, 1292.41, 1289.1, 1311.64, 4966097], ["2026-05-19", 1291.34, 1293.68, 1287.53, 1299.24, 4325464], ["2026-05-20", 1290.46, 1284.6, 1283.62, 1302.17, 4748733], ["2026-05-21", 1282.62, 1280.69, 1280.69, 1292.92, 3886838], ["2026-05-22", 1280.64, 1260.37, 1260.29, 1281.58, 4915714], ["2026-05-25", 1257.24, 1256.15, 1247.48, 1274.62, 4635276], ["2026-05-26", 1255.63, 1243.94, 1240.65, 1260.07, 4593162], ["2026-05-27", 1238.7, 1272.87, 1221.2, 1288.5, 8272791], ["2026-05-28", 1260.17, 1246.48, 1241.61, 1273.85, 4588998], ["2026-05-29", 1241.22, 1295.34, 1240.64, 1298.27, 7647805], ["2026-06-01", 1296.32, 1279.32, 1271.22, 1296.32, 4384460], ["2026-06-02", 1275.8, 1277.0, 1270.92, 1295.69, 3636185], ["2026-06-03", 1273.85, 1252.27, 1246.5, 1273.85, 5247652], ["2026-06-04", 1249.42, 1238.68, 1237.4, 1259.19, 3350617], ["2026-06-05", 1248.45, 1243.43, 1238.43, 1253.34, 3130397], ["2026-06-08", 1242.59, 1233.78, 1230.87, 1248.45, 3082836], ["2026-06-09", 1233.79, 1226.96, 1223.59, 1233.8, 2786012], ["2026-06-10", 1223.13, 1246.38, 1221.3, 1252.36, 3924414], ["2026-06-11", 1242.71, 1249.43, 1237.62, 1253.22, 2535198], ["2026-06-12", 1241.79, 1262.04, 1235.76, 1265.06, 5049478], ["2026-06-15", 1262.81, 1241.71, 1240.73, 1262.81, 4158556], ["2026-06-16", 1237.72, 1226.64, 1225.98, 1238.57, 3496974], ["2026-06-17", 1228.91, 1211.33, 1209.92, 1230.64, 4480330], ["2026-06-18", 1206.45, 1186.91, 1183.22, 1210.23, 5747173], ["2026-06-22", 1186.23, 1212.71, 1177.14, 1223.83, 5825131], ["2026-06-23", 1210.35, 1194.19, 1188.86, 1234.78, 5800405], ["2026-06-24", 1194.38, 1179.76, 1179.59, 1213.16, 4533528], ["2026-06-25", 1179.09, 1184.08, 1172.26, 1198.63, 4844649], ["2026-06-26", 1199.0, 1168.63, 1168.1, 1199.0, 5006647], ["2026-06-29", 1169.0, 1194.96, 1151.01, 1215.0, 6687812], ["2026-06-30", 1187.0, 1185.49, 1176.0, 1195.67, 3960779], ["2026-07-01", 1180.1, 1193.01, 1166.33, 1196.8, 4247381], ["2026-07-02", 1193.01, 1203.0, 1190.51, 1215.52, 5087015], ["2026-07-03", 1205.24, 1194.45, 1185.0, 1210.14, 3426755], ["2026-07-06", 1186.0, 1206.91, 1180.0, 1215.0, 4097001], ["2026-07-07", 1200.0, 1188.8, 1188.11, 1202.0, 2736500], ["2026-07-08", 1188.77, 1199.3, 1177.0, 1200.98, 2577602], ["2026-07-09", 1191.0, 1182.19, 1178.0, 1191.99, 3409634], ["2026-07-10", 1182.2, 1204.98, 1170.28, 1204.98, 5221255], ["2026-07-13", 1197.12, 1210.99, 1190.19, 1215.0, 4198257], ["2026-07-14", 1208.99, 1214.88, 1205.0, 1226.87, 4352726], ["2026-07-15", 1203.66, 1251.06, 1198.66, 1256.6, 7194371], ["2026-07-16", 1252.0, 1258.99, 1245.05, 1267.97, 4761114], ["2026-07-17", 1269.01, 1253.0, 1238.98, 1269.33, 5841730], ["2026-07-20", 1270.0, 1327.5, 1266.0, 1329.0, 10615115], ["2026-07-21", 1338.98, 1308.0, 1296.87, 1344.7, 7714770], ["2026-07-22", 1300.0, 1305.0, 1283.24, 1308.0, 6518140], ["2026-07-23", 1299.8, 1292.01, 1285.43, 1303.0, 3391769], ["2026-07-24", 1305.0, 1297.41, 1286.2, 1309.21, 3569892], ["2026-07-27", 1308.0, 1289.5, 1279.58, 1308.0, 3199044], ["2026-07-28", 1299.0, 1320.0, 1289.52, 1320.0, 5313457], ["2026-07-29", 1333.83, 1321.0, 1312.06, 1343.48, 6232985], ["2026-07-30", 1323.0, 1361.76, 1322.0, 1362.0, 7187261], ["2026-07-31", 1330.03, 1350.6, 1325.77, 1355.72, 5512752], ["2026-08-03", 1350.6, 1358.98, 1346.0, 1363.35, 3614686], ["2026-08-04", 1350.06, 1328.36, 1328.36, 1350.94, 3745031], ["2026-08-05", 1328.36, 1306.45, 1303.5, 1333.8, 4268859], ["2026-08-06", 1310.0, 1308.55, 1300.01, 1314.4, 2546328], ["2026-08-07", 1308.66, 1309.22, 1301.0, 1315.28, 2497581], ["2026-08-10", 1325.0, 1348.86, 1318.08, 1359.97, 6268572], ["2026-08-11", 1348.0, 1346.5, 1338.0, 1352.65, 2707300], ["2026-08-12", 1346.5, 1343.0, 1332.51, 1356.88, 3505960], ["2026-08-13", 1338.0, 1355.29, 1337.0, 1359.6, 3235348], ["2026-08-14", 1355.0, 1341.99, 1338.14, 1359.0, 2985315], ["2026-08-17", 1295.0, 1293.09, 1280.34, 1301.0, 7842956], ["2026-08-18", 1291.0, 1297.99, 1285.17, 1302.9, 3872283], ["2026-08-19", 1300.0, 1307.88, 1290.5, 1308.88, 3754751], ["2026-08-20", 1299.8, 1291.5, 1291.0, 1306.88, 2533166], ["2026-08-21", 1291.5, 1272.83, 1272.01, 1291.5, 3347231], ["2026-08-24", 1271.01, 1304.66, 1270.33, 1313.8, 4843957], ["2026-08-25", 1311.89, 1304.0, 1301.11, 1317.0, 2111118]];
+const dates = raw.map(r => r[0]);
+const closes = raw.map(r => r[2]);
+const highs = raw.map(r => r[4]);
+const lows = raw.map(r => r[3]);
+const ohlc = raw.map(r => [r[1], r[2], r[3], r[4]]);
+const vols = raw.map(r => r[5]);
+
+function ma(arr, n) {
+  const out = new Array(arr.length).fill(null);
+  let sum = 0;
+  for (let i = 0; i < arr.length; i++) {
+    sum += arr[i];
+    if (i >= n) sum -= arr[i - n];
+    if (i >= n - 1) out[i] = sum / n;
+  }
+  return out;
+}
+// 通达信 EMA 递推式: Y1 = X1; Yt = (2*Xt + (N-1)*Yt-1)/(N+1)
+function emaTdx(arr, n) {
+  const out = new Array(arr.length).fill(null);
+  out[0] = arr[0];
+  for (let i = 1; i < arr.length; i++)
+    out[i] = (2 * arr[i] + (n - 1) * out[i - 1]) / (n + 1);
+  return out;
+}
+function avgMa(arr, ns) {
+  const maxN = Math.max(...ns);
+  const lines = ns.map(n => ma(arr, n));
+  return arr.map((_, i) => (i < maxN - 1 ? null :
+    lines.reduce((s, l) => s + l[i], 0) / lines.length));
+}
+// MACD(12,26,9): DIF = EMA12-EMA26; DEA = EMA9(DIF); 柱 = 2*(DIF-DEA)
+function macd(closes, fast = 12, slow = 26, sig = 9) {
+  const eFast = emaTdx(closes, fast), eSlow = emaTdx(closes, slow);
+  const dif = closes.map((_, i) => eFast[i] - eSlow[i]);
+  const dea = emaTdx(dif, sig);
+  const bar = closes.map((_, i) => (dif[i] - dea[i]) * 2);
+  return { dif, dea, bar };
+}
+// 通达信 SMA(X,N,M): Y1 = X1; Yt = (M*Xt + (N-M)*Yt-1)/N  (KDJ 用,非简单平均)
+function smaTdx(arr, N, M) {
+  const out = new Array(arr.length).fill(null);
+  out[0] = arr[0];
+  for (let i = 1; i < arr.length; i++)
+    out[i] = (M * arr[i] + (N - M) * out[i - 1]) / N;
+  return out;
+}
+// KDJ(9,3,3): RSV → K=SMA(RSV,3,1) → D=SMA(K,3,1) → J=3K-2D
+function kdj(highs, lows, closes, n = 9, k = 3, d = 3) {
+  const rsv = closes.map((_, i) => {
+    const from = Math.max(0, i - n + 1);
+    const hh = Math.max(...highs.slice(from, i + 1));
+    const ll = Math.min(...lows.slice(from, i + 1));
+    return hh === ll ? 50 : ((closes[i] - ll) / (hh - ll)) * 100;
+  });
+  const K = smaTdx(rsv, k, 1);
+  const D = smaTdx(K, d, 1);
+  const J = K.map((v, i) => 3 * v - 2 * D[i]);
+  return { K, D, J };
+}
+
+const chart = echarts.init(document.getElementById('chart'));
+const MA_COLORS = ['#4da6ff', '#eb6834', '#c46cff', '#4a3aa7'];
+
+function render() {
+  const macdRes = macd(closes);
+  const kdjRes = kdj(highs, lows, closes);
+  const series = [
+    { name:'K线', type:'candlestick', data: ohlc, itemStyle: {
+        color:'#e66767', color0:'#199e70', borderColor:'#e66767', borderColor0:'#199e70' } },
+    { name:'成交量', type:'bar', xAxisIndex:1, yAxisIndex:1,
+      data: vols.map((v, i) => ({ value:v, itemStyle:{
+        color: raw[i][2] >= raw[i][1] ? 'rgba(230,103,103,0.45)' : 'rgba(25,158,112,0.45)' } })) },
+    { name:'MACD', type:'bar', xAxisIndex:3, yAxisIndex:3,
+      data: macdRes.bar.map(v => ({ value:v, itemStyle:{
+        color: v >= 0 ? 'rgba(230,103,103,0.55)' : 'rgba(25,158,112,0.55)' } })),
+      tooltip:{ valueFormatter: v => v == null ? '-' : v.toFixed(2) } },
+    { name:'DIF', type:'line', xAxisIndex:3, yAxisIndex:3, data: macdRes.dif, showSymbol:false,
+      lineStyle:{ color:'#4da6ff', width:1 },
+      tooltip:{ valueFormatter: v => v == null ? '-' : v.toFixed(2) } },
+    { name:'DEA', type:'line', xAxisIndex:3, yAxisIndex:3, data: macdRes.dea, showSymbol:false,
+      lineStyle:{ color:'#eb6834', width:1 },
+      tooltip:{ valueFormatter: v => v == null ? '-' : v.toFixed(2) } },
+    { name:'K', type:'line', xAxisIndex:2, yAxisIndex:2, data: kdjRes.K, showSymbol:false,
+      lineStyle:{ color:'#ffffff', width:1 },
+      tooltip:{ valueFormatter: v => v == null ? '-' : v.toFixed(2) } },
+    { name:'D', type:'line', xAxisIndex:2, yAxisIndex:2, data: kdjRes.D, showSymbol:false,
+      lineStyle:{ color:'#ffd700', width:1 },
+      tooltip:{ valueFormatter: v => v == null ? '-' : v.toFixed(2) } },
+    { name:'J', type:'line', xAxisIndex:2, yAxisIndex:2, data: kdjRes.J, showSymbol:false,
+      lineStyle:{ color:'#c46cff', width:1 },
+      tooltip:{ valueFormatter: v => v == null ? '-' : v.toFixed(2) } }
+  ];
+  const mode = document.querySelector('input[name="mode"]:checked').id;
+  document.getElementById('grpMA').style.display = mode === 'modeMA' ? 'flex' : 'none';
+  if (mode === 'modeWY') {
+    // 多空线参数固定: 白线 = EMA(EMA(C,10),10), 黄线 = (MA14+MA28+MA57+MA114)/4
+    const white = emaTdx(emaTdx(closes, 10), 10);
+    const yellow = avgMa(closes, [14, 28, 57, 114]);
+    series.push({ name:'白线', type:'line', data: white, showSymbol:false,
+      lineStyle:{ color:'#ffffff', width:1.6 }, z:6,
+      tooltip:{ valueFormatter: v => v == null ? '-' : v.toFixed(2) } });
+    series.push({ name:'黄线', type:'line', data: yellow, showSymbol:false,
+      lineStyle:{ color:'#ffd700', width:1.6 }, z:6,
+      tooltip:{ valueFormatter: v => v == null ? '-' : v.toFixed(2) } });
+  } else {
+    document.getElementById('inpMAs').value.split(',').forEach((s, i) => {
+      const n = +s.trim(); if (!n) return;
+      series.push({ name:'MA'+n, type:'line', data: ma(closes, n), showSymbol:false,
+        lineStyle:{ color: MA_COLORS[i % MA_COLORS.length], width:1.2 }, z:5,
+        tooltip:{ valueFormatter: v => v == null ? '-' : v.toFixed(2) } });
+    });
+  }
+  chart.setOption({
+    animation:false, backgroundColor:'transparent',
+    tooltip:{ trigger:'axis', axisPointer:{ type:'cross' } },
+    legend:{ top:0, textStyle:{ color:'#c3c2b7' } },
+    axisPointer:{ link:[{xAxisIndex:'all'}] },
+    grid:[ {left:60, right:60, top:'5%', height:'40%'},
+           {left:60, right:60, top:'49%', height:'13%'},
+           {left:60, right:60, top:'66%', height:'14%'},
+           {left:60, right:60, top:'84%', height:'12%'} ],
+    title:[
+      { text:'成交量', left:66, top:'49%', textStyle:{ color:'#b8b7b0', fontSize:11, fontWeight:'normal' } },
+      { text:'KDJ',    left:66, top:'66%', textStyle:{ color:'#b8b7b0', fontSize:11, fontWeight:'normal' } },
+      { text:'MACD',   left:66, top:'84%', textStyle:{ color:'#b8b7b0', fontSize:11, fontWeight:'normal' } }
+    ],
+    xAxis:[
+      { type:'category', data:dates, gridIndex:0, axisLabel:{color:'#898781', showMaxLabel:true},
+        axisLine:{lineStyle:{color:'#2c2c2a'}} },
+      { type:'category', data:dates, gridIndex:1, axisLabel:{show:false},
+        axisLine:{lineStyle:{color:'#2c2c2a'}} },
+      { type:'category', data:dates, gridIndex:2, axisLabel:{show:false},
+        axisLine:{lineStyle:{color:'#2c2c2a'}} },
+      { type:'category', data:dates, gridIndex:3, axisLabel:{show:false},
+        axisLine:{lineStyle:{color:'#2c2c2a'}} }
+    ],
+    yAxis:[
+      { scale:true, gridIndex:0, axisLabel:{color:'#898781'}, splitLine:{lineStyle:{color:'#2c2c2a'}} },
+      { gridIndex:1, axisLabel:{show:false}, splitLine:{show:false} },
+      { scale:true, gridIndex:2, axisLabel:{color:'#898781'}, splitLine:{lineStyle:{color:'#2c2c2a'}} },
+      { scale:true, gridIndex:3, axisLabel:{color:'#898781'}, splitLine:{lineStyle:{color:'#2c2c2a'}} }
+    ],
+    dataZoom:[ {type:'inside', xAxisIndex:[0,1,2,3], start:35, end:100},
+               {type:'slider', xAxisIndex:[0,1,2,3], bottom:0, height:18,
+                borderColor:'#2c2c2a', backgroundColor:'#1a1a19',
+                fillerColor:'rgba(235,104,52,0.2)', textStyle:{color:'#898781'}} ],
+    series
+  }, { notMerge:true });
+}
+// 切换模式 / 修改参数 / 回车 → 自动重画,无需手动
+document.querySelectorAll('input').forEach(i => {
+  i.addEventListener('change', render);
+  i.addEventListener('input', render);
+  i.addEventListener('keydown', e => { if (e.key === 'Enter') render(); });
+});
+render();
+</script>
+</body></html>
