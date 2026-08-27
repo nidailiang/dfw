@@ -1,10 +1,18 @@
 {
-  "model": "deepseek-v4-pro",
   "env": {
-    "ANTHROPIC_MODEL": "deepseek-v4-pro",
-    "ANTHROPIC_DEFAULT_SONNET_MODEL": "deepseek-v4-pro",
-    "ANTHROPIC_DEFAULT_OPUS_MODEL": "deepseek-v4-pro",
-    "ANTHROPIC_DEFAULT_HAIKU_MODEL": "deepseek-v4-pro",
-    "CLAUDE_CODE_SUBAGENT_MODEL": "deepseek-v4-pro"
-  }
+    "ANTHROPIC_AUTH_TOKEN": "c5bed46515f34add8e8f88f49ef9eebc.Z5lnAsYVDkHhzhgC",
+    "ANTHROPIC_BASE_URL": "https://open.bigmodel.cn/api/anthropic",
+    "ANTHROPIC_MODEL": "glm-5.3-flash",
+    "ANTHROPIC_DEFAULT_OPUS_MODEL": "glm-5.3-flash",
+    "ANTHROPIC_DEFAULT_SONNET_MODEL": "glm-5.3-flash",
+    "ANTHROPIC_DEFAULT_HAIKU_MODEL": "glm-5.3-flash",
+    "CLAUDE_CODE_SUBAGENT_MODEL": "glm-5.3-flash",
+    "CLAUDE_CODE_EFFORT_LEVEL": "max"
+  },
+  "autoCompactEnabled": true,
+  "hooks": {},
+  "permissions": {
+    "defaultMode": "bypassPermissions"
+  },
+  "skipDangerousModePermissionPrompt": true
 }

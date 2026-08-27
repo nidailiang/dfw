@@ -145,7 +145,8 @@ def call_ai(prompt: str) -> str:
 
     body = {
         "model": model,
-        "max_tokens": 8000,
+        # 默认 8000; 报告较长(表格多)被截断时可用环境变量调大, 如 ANTHROPIC_MAX_TOKENS=16000
+        "max_tokens": int(os.environ.get("ANTHROPIC_MAX_TOKENS", "8000")),
         "system": "你是资深 A 股基本面分析师, 输出严谨、客观、基于数据的中文分析报告。",
         "messages": [{"role": "user", "content": prompt}],
     }
